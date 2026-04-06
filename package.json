@@ -1,0 +1,76 @@
+{
+  "name": "copilot-prompt-optimizer",
+  "displayName": "Copilot Prompt Optimizer",
+  "description": "An intelligent prompt optimizer for VS Code Copilot Chat, enhancing user intent with codebase context and best practices.",
+  "version": "1.0.0",
+  "publisher": "local-dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/local/copilot-prompt-optimizer.git"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:copilot-prompt-optimizer.optimize"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "copilot-prompt-optimizer.optimizer",
+        "name": "optimizer",
+        "description": "Optimize your prompt with codebase context before asking Copilot",
+        "isSticky": true
+      }
+    ],
+    "commands": [
+      {
+        "command": "copilot-prompt-optimizer.optimize",
+        "title": "Copilot Optimizer: Enhance Prompt"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "copilot-prompt-optimizer.optimize",
+          "group": "copilot@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Copilot Prompt Optimizer",
+      "properties": {
+        "copilotPromptOptimizer.defaultTemplate": {
+          "type": "string",
+          "default": "senior-developer",
+          "enum": ["senior-developer", "code-reviewer", "test-engineer", "architect"],
+          "description": "The default persona/template to use for prompt optimization."
+        },
+        "copilotPromptOptimizer.includeContext": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically include active editor context and selections."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "typescript": "^5.3.3",
+    "@vscode/test-cli": "^0.0.8"
+  }
+}
