@@ -47,6 +47,7 @@ class ContextManager {
         }
         const document = editor.document;
         const selection = editor.selection;
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
         // Get selected text
         const selectionText = document.getText(selection);
         // Get surrounding code (Context compression technique: Limit to max 50 lines around selection)
@@ -57,7 +58,12 @@ class ContextManager {
             languageId: document.languageId,
             fileName: document.fileName.split(/[/\\]/).pop() || 'Unknown',
             selectionText,
-            surroundingCode
+            surroundingCode,
+            workspaceName: workspaceFolder?.name,
+            relativePath: workspaceFolder
+                ? vscode.workspace.asRelativePath(document.uri, false)
+                : undefined,
+            lineCount: document.lineCount
         };
     }
 }

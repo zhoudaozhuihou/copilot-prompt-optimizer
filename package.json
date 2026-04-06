@@ -16,7 +16,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:copilot-prompt-optimizer.optimize"
+    "onCommand:copilot-prompt-optimizer.optimize",
+    "onCommand:copilot-prompt-optimizer.analyzeDataProgram"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -25,13 +26,23 @@
         "id": "copilot-prompt-optimizer.optimizer",
         "name": "optimizer",
         "description": "Optimize your prompt with codebase context before asking Copilot",
-        "isSticky": true
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "data-program",
+            "description": "Generate a multi-stack optimization plan for SQL, Python, React, and Java"
+          }
+        ]
       }
     ],
     "commands": [
       {
         "command": "copilot-prompt-optimizer.optimize",
         "title": "Copilot Optimizer: Enhance Prompt"
+      },
+      {
+        "command": "copilot-prompt-optimizer.analyzeDataProgram",
+        "title": "Copilot Optimizer: Analyze Data Program"
       }
     ],
     "menus": {
@@ -55,6 +66,66 @@
           "type": "boolean",
           "default": true,
           "description": "Automatically include active editor context and selections."
+        },
+        "copilotPromptOptimizer.dataProgram.monitoringEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable monitoring and evaluation checkpoints in generated optimization plans."
+        },
+        "copilotPromptOptimizer.dataProgram.defaultStacks": {
+          "type": "array",
+          "default": ["sql", "python", "react", "java"],
+          "items": {
+            "type": "string",
+            "enum": ["sql", "python", "react", "java"]
+          },
+          "description": "Default technology stacks included in a multi-stack optimization analysis."
+        },
+        "copilotPromptOptimizer.sql.maxIndexSuggestions": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "description": "Maximum number of SQL index recommendations to surface."
+        },
+        "copilotPromptOptimizer.sql.analyzeExecutionPlan": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include execution plan analysis guidance for SQL workloads."
+        },
+        "copilotPromptOptimizer.python.memoryBudgetMb": {
+          "type": "number",
+          "default": 1024,
+          "minimum": 128,
+          "description": "Target Python memory budget used for optimization recommendations."
+        },
+        "copilotPromptOptimizer.python.enableParallelHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Recommend multiprocessing, vectorization, or distributed execution for Python tasks when relevant."
+        },
+        "copilotPromptOptimizer.react.stateStrategy": {
+          "type": "string",
+          "default": "query-cache",
+          "enum": ["query-cache", "redux-toolkit", "context-split"],
+          "description": "Preferred React state management strategy for data-heavy views."
+        },
+        "copilotPromptOptimizer.react.virtualizationThreshold": {
+          "type": "number",
+          "default": 200,
+          "minimum": 20,
+          "description": "Row threshold after which virtualization should be recommended."
+        },
+        "copilotPromptOptimizer.java.threadPoolSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 1,
+          "description": "Preferred Java worker thread pool size for server-side data processing recommendations."
+        },
+        "copilotPromptOptimizer.java.cacheStrategy": {
+          "type": "string",
+          "default": "caffeine+redis",
+          "enum": ["caffeine", "redis", "caffeine+redis"],
+          "description": "Preferred cache strategy for Java data services."
         }
       }
     }

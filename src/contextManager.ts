@@ -5,6 +5,9 @@ export interface CodeContext {
     fileName: string;
     selectionText: string;
     surroundingCode: string;
+    workspaceName?: string;
+    relativePath?: string;
+    lineCount: number;
 }
 
 export class ContextManager {
@@ -21,6 +24,7 @@ export class ContextManager {
 
         const document = editor.document;
         const selection = editor.selection;
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
 
         // Get selected text
         const selectionText = document.getText(selection);
@@ -34,7 +38,12 @@ export class ContextManager {
             languageId: document.languageId,
             fileName: document.fileName.split(/[/\\]/).pop() || 'Unknown',
             selectionText,
-            surroundingCode
+            surroundingCode,
+            workspaceName: workspaceFolder?.name,
+            relativePath: workspaceFolder
+                ? vscode.workspace.asRelativePath(document.uri, false)
+                : undefined,
+            lineCount: document.lineCount
         };
     }
 }

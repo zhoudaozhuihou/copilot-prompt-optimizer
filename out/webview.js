@@ -80,6 +80,9 @@ class OptimizerWebview {
             </div>
         `).join('');
         const suggestionsHtml = data.suggestions.map(s => `<li>${this.escapeHtml(s)}</li>`).join('');
+        const strategiesHtml = data.appliedStrategies
+            .map(strategy => `<li>${this.escapeHtml(strategy)}</li>`)
+            .join('');
         return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,12 +109,19 @@ class OptimizerWebview {
     <div class="section">
         <h2>Intent Analysis</h2>
         <p><strong>Recognized Intent:</strong> ${this.escapeHtml(data.intent)}</p>
+        <p><strong>Applied Template:</strong> ${this.escapeHtml(data.templateName)}</p>
+        <p><strong>Model Path:</strong> ${this.escapeHtml(data.modelInfo)}</p>
         <p><strong>Original Prompt:</strong> ${this.escapeHtml(rawPrompt)}</p>
     </div>
 
     <div class="section">
         <h2>Actionable Suggestions</h2>
         <ul>${suggestionsHtml}</ul>
+    </div>
+
+    <div class="section">
+        <h2>Applied Strategies</h2>
+        <ul>${strategiesHtml}</ul>
     </div>
 
     <h2>Optimized Versions</h2>

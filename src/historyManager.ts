@@ -4,6 +4,8 @@ export interface HistoryRecord {
     optimizedPrompt: string;
     intent: string;
     context: any;
+    templateName?: string;
+    appliedStrategies?: string[];
 }
 
 export class HistoryManager {

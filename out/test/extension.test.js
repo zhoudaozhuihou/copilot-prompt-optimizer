@@ -45,17 +45,21 @@ suite('Extension Test Suite', () => {
         // Since we run this in an empty environment initially, it should be undefined
         assert.strictEqual(ctx, undefined);
     });
-    test('Optimizer throws if no model found or without token', async () => {
+    test('Optimizer returns a structured fallback result when no model is available', async () => {
         const optimizer = new optimizer_1.PromptOptimizer();
-        try {
-            const tokenSource = new vscode.CancellationTokenSource();
-            await optimizer.optimize('test prompt', undefined, undefined, tokenSource.token);
-            // This might succeed or fail depending on if Copilot LM API is mocked/available.
-            // In a standard test environment without the real Copilot, it will likely throw.
-        }
-        catch (e) {
-            assert.ok(e.message.includes('Copilot Language Model is not available') || e.message.includes('process prompt optimization'));
-        }
+        const tokenSource = new vscode.CancellationTokenSource();
+        const result = await optimizer.optimize('test prompt', undefined, undefined, tokenSource.token);
+        assert.ok(result.optimizedPrompt.length > 0);
+        assert.ok(result.templateName.length > 0);
+    });
+    test('Optimizer applies architecture template for SQL assistant architecture prompts', async () => {
+        const optimizer = new optimizer_1.PromptOptimizer();
+        const tokenSource = new vscode.CancellationTokenSource();
+        const result = await optimizer.optimize('生成一个sql assistant的产品架构图，需要 mermaid，体现 query optimizer、index advisor 和 execution plan analyzer', undefined, undefined, tokenSource.token);
+        assert.strictEqual(result.templateName, 'sql-assistant-architecture');
+        assert.ok(result.optimizedPrompt.includes('# Role'));
+        assert.ok(result.optimizedPrompt.includes('# Output Format'));
+        assert.ok(result.appliedStrategies.length > 0);
     });
 });
 //# sourceMappingURL=extension.test.js.map
